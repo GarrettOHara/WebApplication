@@ -6,6 +6,10 @@ instance/*
 !instance/.gitignore
 .webassets-cache
 .env
+cloud_sql_proxy
+
+## Environment Variables ##
+app.yaml
 
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files
