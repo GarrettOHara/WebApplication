@@ -1,0 +1,24 @@
+
+
+Connect to mySQL server with SSL connection:
+mysql -uroot -p -h 34.102.102.173 --ssl-ca=server-ca.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem
+
+root password:
+DatabasesRuleTheWorld
+
+Create Virtual ENV
+virtualenv env
+
+Start Virtual ENV
+source tutorial-env/bin/activate
+
+START CLOUD PROXY
+
+./cloud_sql_proxy -instances=dotted-vim-327120:us-central1:vote-caster-data=tcp:3306
+
+END CLOUD PROXY
+
+sudo kill `sudo lsof -t -i:3306`
+
+
+

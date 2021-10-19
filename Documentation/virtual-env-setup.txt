@@ -45,7 +45,7 @@ PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
 export CLOUD_SQL_USERNAME="root"
 export CLOUD_SQL_PASSWORD="DatabaseFundementals69"
-export CLOUD_SQL_DATABASE_NAME="production"
+export CLOUD_SQL_DATABASE_NAME="dotted-vim-327120:us-central1:vote-caster-data"
 
 
 # unset PYTHONHOME if set
