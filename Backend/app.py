@@ -16,8 +16,8 @@ def init_tcp_connection_engine():
             username=db_user,  # e.g. "my-database-user"
             password=db_pass,  # e.g. "my-database-password"
             host='127.0.0.1',  # 192.168.1.186',  # e.g. "127.0.0.1"
-            port=3306,  # 5000,  # e.g. 3306
-            database=db_name,  # e.g. "my-database-name"
+            port=3306,
+            database=db_name,  # e.g. "production"
         ),
     )
     return pool
@@ -30,13 +30,13 @@ db = None
 def create_tables():
     global db
     db = init_tcp_connection_engine()
-    with db.connect() as conn:
-        print("database connected :)")
-        # conn.execute(
-        #     "CREATE TABLE IF NOT EXISTS votes "
-        #     "( vote_id SERIAL NOT NULL, time_cast timestamp NOT NULL, "
-        #     "candidate CHAR(6) NOT NULL, PRIMARY KEY (vote_id) );"
-        # )
+    print("database connected :)")
+    # with db.connect() as conn:
+    #     conn.execute(
+    #         "CREATE TABLE IF NOT EXISTS votes "
+    #         "( vote_id SERIAL NOT NULL, time_cast timestamp NOT NULL, "
+    #         "candidate CHAR(6) NOT NULL, PRIMARY KEY (vote_id) );"
+    #     )
 
 
 def describe_schema():
