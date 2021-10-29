@@ -1,9 +1,9 @@
 import os
 import sqlalchemy
+from Website import create_app
 from flask import Flask, Request, Response, render_template
 
-app = Flask(__name__)
-
+app = create_app()
 
 def init_tcp_connection_engine():
     db_user = os.environ["CLOUD_SQL_USERNAME"]
@@ -61,7 +61,7 @@ def describe_schema():
 @app.route("/", methods=["GET"])
 def home():
     res = describe_schema()
-    return render_template('home.html')
+    return res# render_template('home.html')
 
 
 # @app.errorhandler(404)
