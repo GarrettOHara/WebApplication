@@ -1,4 +1,16 @@
-from flask import Blueprint, render_template, request, flash
+# -----------------------------------------------------------
+# Route definitions for Web Application
+#
+# 2021  Garrett O'Hara, Nick Kokenis, Matt Schuiteman
+# email garrettohara2018@gmail.com
+#       nkokenisXXXX@sdsu.edu
+#       mschuitemanXXX@sdsu.edu
+# -----------------------------------------------------------
+
+import re
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import Answer, Choice, Question
+from . import db
 
 routes = Blueprint("routes", __name__)
 
@@ -10,22 +22,24 @@ def home():
 def create_poll():
     if request.method == 'POST':
         question = request.form.get('question')
-        option = request.form.get('option')
+        option0 = request.form.get('option0')
+        option1 = request.form.get('option1')
 
-        if question == None:
-            flash("Please enter a question", category="error")
-        elif option is None:
-            flash("Please enter a response", category="error")
+        print("Question: {} \nOption: {}\nOption: {}".format(question,option0,option1))
+
+        if len(question) < 1:
+            flash("Your question is too short!", category="error")
+        elif len(option0) < 1 or len(option1) < 1:
+            flash("Please enter text for option", category="error")
         else:
-            print("Question: {} \nOption: {}".format(question,option))
+            # IF WE WANT POLL PREVIEW WE NEED TO MOVE THIS
+            # THERE THIS CREATES IT RIGHT AWAT
+            # new_poll = Question(text=question)
+            # db.session.add(new_poll)
+            # db.session.commit()
+            flash("Poll Created", category="success")
+            return redirect(url_for('routes.share_poll'))
 
-            if len(question) < 1:
-                flash("Your question is too short!", category="error")
-            elif len(option) < 1:
-                flash("Please enter text for option", category="error")
-            else:
-                flash("Poll Created!", category="success")
-                # Add data to database
 
     return render_template("create_poll.html")
 

@@ -1,7 +1,15 @@
+# -----------------------------------------------------------
+# DEPRICATED Legacy connect
+#
+# 2021  Garrett O'Hara, Nick Kokenis, Matt Schuiteman
+# email garrettohara2018@gmail.com
+#       nkokenisXXXX@sdsu.edu
+#       mschuitemanXXX@sdsu.edu
+# -----------------------------------------------------------
+
 import os
 import sqlalchemy
 from Website import create_app
-from flask import Flask, Request, Response, render_template
 
 app = create_app()
 
