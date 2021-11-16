@@ -1,3 +1,11 @@
 {% extends "base.html" %} {% block title %}Pollster: Share{% endblock %} {% block content
 %}
+
+<br />
+<form method="GET">
+    <h3 style="text-align: center">Share the Question you created to see the results!</h3>
+    <p>Here's your shareable link: <a href="url">{{share}}</a>
+    </p>
+</form>
+
 {% endblock %}

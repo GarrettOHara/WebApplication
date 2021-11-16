@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Pollster: Answer Poll{% endblock %} {% block content
+%}
+
+<br/>
+<form method="POST">
+    <h3 style="text-align: center">{{question}}</h3>
+    <div>
+        <div class="row">
+            <div class="col">
+            <div class="form-group" id="list-tab" role="tablist">
+                {% for row in data %}
+                    <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">{{ row['text'] }}</a>
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+    </div>
+<br/>
+<button type="submit" class="btn btn-primary pull-right">Submit</button>
+
+</form>
+
+{% endblock %}

@@ -10,8 +10,18 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+
 
 db = SQLAlchemy()
+
+# Testing the connection to the database
+def connection():
+    print("DATABASE CONNECTED, SHOWING TABLES:")
+    sql = text("SHOW TABLES")
+    result = db.engine.execute(sql)
+    names = [row[0] for row in result]
+    print(names)
 
 def database_url():
     db_user = os.environ["CLOUD_SQL_USERNAME"]
@@ -33,6 +43,8 @@ def create_app():
     db.init_app(app)
 
     from .routes import routes
+
+    app.before_first_request(connection)
 
     app.register_blueprint(routes,url_prefix='/')
 
