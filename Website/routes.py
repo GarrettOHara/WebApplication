@@ -71,7 +71,7 @@ def share_poll():
     qid = session['qid']
     print("SHARE POLL: "+str(qid))
     parameters = {"qid": qid}
-    url = "http://localhost:5000/answer_poll?"
+    url = "localhost:5000/answer_poll?"
     share = url+urllib.parse.urlencode(parameters)
     print(share)
     return render_template("share_poll.html", share=share)
@@ -88,39 +88,60 @@ def search():
 
 
 @routes.route('/answer_poll', methods=['GET', 'POST'])
-def anser_poll():
-    if request.method == "GET":
+def answer_poll():
+    # POST REQUEST
+    if request.method == "POST":
+        print("POST OF ANSWER")
+
+        # GET ALL ANSWERS
+        form = request.form.getlist('keys')
+
+        # USER MUST ANSWER QUESTION, RE-RENDER TEMPLATE
+        if len(form) == 0:
+            flash("Please answer the question.", category="error")
+            return render_template("answer_poll.html",question=session['question'],data=session['question_object'])
+
+        else:
+            # CREATE AN ANSWER OBJECT FOR EACH CHOICE THE USER SELECTED
+            for key in form:
+                dic = session['question_object'][key]
+                print(dic)
+                choice = dic['choice_id']
+                question = dic['question_id']
+                answer = Answer(choice_id=choice,question_id=question)
+                db.session.add(answer)
+
+            # WRITE ANSWERS TO DATABASE
+            db.session.commit()
+
+            # DISPLAY SUCCESSFUL WRITE TO USER
+            flash("Response Recorded", category="success")
+            return redirect(url_for('routes.results'))
+
+    # GET REQUEST
+    else:
         qid = request.args.get("qid")
         sql = text("SELECT * FROM question, choice WHERE question.question_id={} AND choice.question_id={}".format(qid,qid))
         result = db.engine.execute(sql)
 
         # STORE CHOICE ROWS IN LIST AS DICTIONARY OBJECTS
-        dics = []
+        dic = {}
         for r in result:
-            dics.append(dict(r.items())) # convert to dict keyed by column names
-        print(dics)
+            dic[r['choice']] = dict(r.items())
+        print(dic)
+
+        # STORE DICTIONARY OF ROWS IN SESSION
+        session['question_object'] = dic
 
         # GET QUESTION
-        sql = text("SELECT text FROM question WHERE question_id={}".format(qid))
+        sql = text("SELECT text FROM question WHERE question_id={} LIMIT 1".format(qid))
         result = db.engine.execute(sql)
-        question = ""
         for r in result:
             question=r[0]
-        print(question)
-        return render_template("answer_poll.html",question=question,data=dics)
-    
-    if request.method == "POST":
-        print("POST OF ANSWER")
-        f = request.form
-        for key in f.keys():
-            for value in f.getlist(key):
-                print(key+":"+value)
-        
-        flash("Response Recorded", category="success")
-        return redirect(url_for('routes.results'))
-        
-    
+        session['question'] = question
 
+        return render_template("answer_poll.html",question=question,data=dic)
+    
 
 @routes.errorhandler(404)
 def not_found_error(error):
