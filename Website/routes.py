@@ -6,14 +6,14 @@
 #       nkokenisXXXX@sdsu.edu
 #       mschuitemanXXX@sdsu.edu
 # -----------------------------------------------------------
-
-import re
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from .models import Answer, Choice, Question
-from . import db
 import urllib
+import threading as thread
+from . import db
+from . import results_graph
 from sqlalchemy import text
-from flask import jsonify
+from .models import Answer, Choice, Question
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+
 
 routes = Blueprint("routes", __name__)
 
@@ -63,6 +63,33 @@ def create_poll():
 
 @routes.route('results', methods=['GET', 'POST'])
 def results():
+    question = session['qid']
+    sql = text(
+        """
+        SELECT q.text as Question, c.text AS Choice, COUNT(c.choice_id) AS Responses
+        FROM question AS q, choice AS c, answer as a
+        WHERE a.question_id = q.question_id and a.choice_id = c.choice_id and q.question_id = {}
+        GROUP BY a.choice_id;
+        """.format(question)
+    )
+    result = db.engine.execute(sql)
+
+    responses = []
+    choices = []
+    question = ""
+    print("RESULTS:")
+    for r in result:
+        responses.append(r['Responses'])
+        choices.append(r['Choice'])
+
+    th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
+    th.start()
+    # th.join()
+    # results_graph.graph(choices, responses)
+    # STORE CHOICE ROWS IN LIST AS DICTIONARY OBJECTS
+    # for r in result.keys():
+    #     print(r)
+
     return render_template("results.html")
 
 
@@ -99,7 +126,7 @@ def answer_poll():
         # USER MUST ANSWER QUESTION, RE-RENDER TEMPLATE
         if len(form) == 0:
             flash("Please answer the question.", category="error")
-            return render_template("answer_poll.html",question=session['question'],data=session['question_object'])
+            return render_template("answer_poll.html",question=session['qid'],data=session['question_object'])
 
         else:
             # CREATE AN ANSWER OBJECT FOR EACH CHOICE THE USER SELECTED
@@ -110,6 +137,9 @@ def answer_poll():
                 question = dic['question_id']
                 answer = Answer(choice_id=choice,question_id=question)
                 db.session.add(answer)
+
+            # STORE QUESTION ID FOR RESULTS QUERY
+            session['qid'] = question
 
             # WRITE ANSWERS TO DATABASE
             db.session.commit()

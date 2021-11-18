@@ -37,7 +37,7 @@ def database_url():
 def create_app():
     app = Flask(__name__,template_folder='../Templates/')
     app.config['SECRET_KEY']="development secret key"
-    app.config["STATIC_FOLDER"]="Static"
+    app.config["STATIC_FOLDER"]="static"
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url()
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
