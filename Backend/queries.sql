@@ -69,3 +69,49 @@ GROUP BY a.choice_id;
 
 ('Testing creating polls', 'Option B', 3)
 ('Testing creating polls', 'Option A', 1)
+
+
+SELECT * FROM (
+  SELECT COUNT(answer.question_id)
+  FROM answer
+  GROUP BY answer.question_id
+) AS Responses ORDER BY answer.question_id ASC;
+
+SELECT COUNT(answer.question_id) AS Responses
+FROM answer
+ORDER BY answer.question_id DESC
+GROUP BY answer.question_id
+;
+
+
+SELECT *
+FROM answer, question
+WHERE question.question_id = answer.question_id
+GROUP BY question.question_id;
+
+SELECT * as Repsonses
+FROM answer
+ORDER BY(
+  SELECT COUNT(*) as Repsonses
+  FROM answer
+  GROUP BY answer.question_id 
+  ORDER BY Repsonses DESC
+) ASC;
+
+-- HISTORY QUERY
+-- RETURN QUESTION DATA AND RESPONSE DATA
+-- ORDERS RESPONSES OF QUESTIOSN DESCENDING
+SELECT *,COUNT(*) as Repsonses
+FROM answer, question
+WHERE answer.question_id = question.question_id
+GROUP BY answer.question_id 
+ORDER BY Repsonses DESC;
+------------------------------------------------
+
+-- SEARCH QUERY
+-- RETURN STRING MATCH ON DATA WITH LIKE OPERATOR
+-- USE PYTHON STRING FORMATTING TO INPUT USER SEARCH
+SELECT *
+FROM question
+WHERE question.text LIKE '{}%';
+-------------------------------------------------
