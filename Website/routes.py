@@ -7,6 +7,7 @@
 #       mschuitemanXXX@sdsu.edu
 # -----------------------------------------------------------
 import urllib
+import time
 import threading as thread
 from . import db
 from . import results_graph
@@ -48,6 +49,7 @@ def create_poll():
             op = 'A'
             for option in options:
                 choice = Choice(question_id=poll.question_id,choice=op,text=option)
+                # CREATE ANSWER
                 op = chr(ord(op)+1)
                 db.session.add(choice)
 
@@ -66,7 +68,7 @@ def results():
     question = session['qid']
     sql = text(
         """
-        SELECT q.text as Question, c.text AS Choice, COUNT(c.choice_id) AS Responses
+        SELECT q.text as Question, c.text AS Choice, COUNT(c.choice_id)-1 AS Responses
         FROM question AS q, choice AS c, answer as a
         WHERE a.question_id = q.question_id and a.choice_id = c.choice_id and q.question_id = {}
         GROUP BY a.choice_id;
@@ -84,6 +86,7 @@ def results():
 
     th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
     th.start()
+    time.sleep(1)
     # th.join()
     # results_graph.graph(choices, responses)
     # STORE CHOICE ROWS IN LIST AS DICTIONARY OBJECTS
