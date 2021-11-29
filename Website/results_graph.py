@@ -15,9 +15,17 @@ def graph_values(choices, responses):
     # plt.title(question)
     plt.xlabel("Choices")
     plt.ylabel("Responses")
-    plt.savefig('Website/static/poll_results.png')
+    # name = create_image_name()
+    plt.savefig('Website/static/{}.png'.format("poll_results"))
     plt.close('all')
+    # return name
     # plt.show()
+
+def create_image_name():
+    import datetime
+    basename = "poll_results"
+    suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+    return "_".join([basename, suffix])
 
 # def graph(choices,responses):
 #     thread.start_new_thread(graph_values(choices,responses),(choices,responses))

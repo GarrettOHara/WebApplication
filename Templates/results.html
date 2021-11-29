@@ -1,9 +1,12 @@
 {% extends "base.html" %} {% block title %}Pollster: Poll Results{% endblock %} {% block content
 %}
+
+
 <br>
 <h3 style="text-align: center">{{ session['question'] }}</h3>
 <br>
 <div>
     <img src="{{url_for('static', filename='poll_results.png')}}" align="middle" />
+    <img src="/plot.png" alt="my plot">
 </div>
 {% endblock %}

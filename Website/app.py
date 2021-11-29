@@ -45,7 +45,19 @@ def create_tables():
     #         "( vote_id SERIAL NOT NULL, time_cast timestamp NOT NULL, "
     #         "candidate CHAR(6) NOT NULL, PRIMARY KEY (vote_id) );"
     #     )
-
+@app.before_request
+def before_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
 
 def describe_schema():
     schema = []
