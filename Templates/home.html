@@ -1,3 +1,15 @@
 {% extends "base.html" %} {% block title %}Pollster: Home{% endblock %} {% block content
 %}
+
+<br>
+<form method="POST">
+    <h3 style="text-align: center">Welcome to Pollster</h3>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="/create_poll" role="button">Create Poll</a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="/search" role="button">Find Poll</a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="/history" role="button">Poll History</a>
+</form>
+
 {% endblock %}
