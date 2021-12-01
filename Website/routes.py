@@ -28,23 +28,41 @@ def home():
 def create_poll():
     if request.method == 'POST':
         question = request.form.get('question')
-        option0 = request.form.get('option0')
-        option1 = request.form.get('option1')
-        options = [option0,option1]
+        #options = []
+        #while(request.form.get('option') != None):
+        #options.append(request.form.get('option'))
 
-        print("Question: {} \nOption: {}\nOption: {}".format(
-            question, option0, option1))
+        options = request.form.getlist('option')
+
+        print(len(options))
+
+        #print("Question: {} \nOption: {}\nOption: {}".format(
+            #question, option0, option1))
+
+        error_control = 0
 
         if len(question) < 1:
             flash("Your question is too short!", category="error")
-        elif len(option0) < 1 or len(option1) < 1:
-            flash("Please enter text for option", category="error")
-        else:
-            # IF WE WANT POLL PREVIEW WE NEED TO MOVE THIS
-            # THERE THIS CREATES IT RIGHT AWAT
+            error_control = 1
+        
+        for optn in options:
+            if len(optn) < 1:
+                flash("Please enter text for option", category="error")
+                error_control = 1
+
+        if error_control == 0:
             poll = Question(text=question)
             db.session.add(poll)
             db.session.flush()
+
+        #elif len(option0) < 1 or len(option1) < 1:
+            #flash("Please enter text for option", category="error")
+        #else:
+            # IF WE WANT POLL PREVIEW WE NEED TO MOVE THIS
+            # THERE THIS CREATES IT RIGHT AWAT
+            #poll = Question(text=question)
+            #db.session.add(poll)
+            #db.session.flush()
 
             op = 'A'
             for option in options:
