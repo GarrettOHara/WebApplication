@@ -90,9 +90,13 @@ def results():
             responses.append(r['Responses'])
             choices.append(r['Choice'])
 
+        # ORIGINAL GRAPHING METHOD
         # th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
         # th.start()
         # time.sleep(4)
+
+
+        # ALTERNATIVE GRAPHING METHOD (NOT FINISHED, AT BOTTOM OF FILE)
         thread = Thread(target=plot_png)
         thread.start()
         thread.join()
@@ -115,7 +119,7 @@ def share_poll():
     s.connect(("8.8.8.8", 80))
     socket = s.getsockname()[0]
     s.close()
-    url = "{}:5000/answer_poll?".format(socket)
+    url = "http://{}:5000/answer_poll?".format(socket)
     share = url+urllib.parse.urlencode(parameters)
     print(share)
     return render_template("share_poll.html", share=share)
@@ -194,6 +198,11 @@ def answer_poll():
 def not_found_error(error):
     return render_template('404.html'), 404
 
+"""
+The code below is a possibility of fixing the graph
+
+You can create matplot graphs like this instead of saving the image
+"""
 import io
 import random
 from flask import Response
@@ -238,6 +247,10 @@ def plot_png():
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
+"""
+We could have the graph created in here
+This is a simple example
+"""
 def create_figure(responses,choices):
     # print(len(responses))
     # fig = Figure()
@@ -258,18 +271,3 @@ def create_figure(responses,choices):
     plt.savefig('Website/static/{}.png'.format("poll_results"))
     plt.close('all')
     return fig
-
-    # print(choices)
-    # print(responses)
-    # plt.figure().clear()
-    # x_pos = [i for i, _ in enumerate(choices)]
-    # plt.xticks(x_pos, choices)
-    # plt.bar(x_pos,responses)
-    # # plt.title(question)
-    # plt.xlabel("Choices")
-    # plt.ylabel("Responses")
-    # # name = create_image_name()
-    # plt.savefig('Website/static/{}.png'.format("poll_results"))
-    # plt.close('all')
-    # # return name
-    # # plt.show()
