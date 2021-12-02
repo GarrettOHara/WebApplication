@@ -109,16 +109,16 @@ def results():
             choices.append(r['Choice'])
 
         # ORIGINAL GRAPHING METHOD
-        # th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
-        # th.start()
-        # time.sleep(4)
+        th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
+        th.start()
+        time.sleep(1)
 
 
         # ALTERNATIVE GRAPHING METHOD (NOT FINISHED, AT BOTTOM OF FILE)
-        thread = Thread(target=plot_png)
-        thread.start()
-        thread.join()
-        time.sleep(1)
+        # thread = Thread(target=plot_png)
+        # thread.start()
+        # thread.join()
+        # time.sleep(1)
         # import base64
         # data_uri = base64.b64encode(open('Website/static/poll_results.png', 'rb').read()).decode('utf-8')
         # img_tag = '<img src="data:image/png;base64,{0}">'.format(data_uri)
@@ -145,6 +145,7 @@ def share_poll():
 
 @routes.route('/history', methods=['GET', 'POST'])
 def view_history():
+
     return render_template("history.html")
 
 
