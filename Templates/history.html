@@ -1,11 +1,20 @@
 {% extends "base.html" %} {% block title %}Pollster: View Polls{% endblock %} {% block content
 %}
-<form metho="POST">
-<h3 class="text-align: center">See Popular Polls!</h3>
+
+<br>
+<form method="GET">
+<h3 style="text-align: center">Poll History</h3>
 <div>
-    {% for row in data.keys() %}
-            <input type="button" id= name= value=>
-            <label for=>{{  }}</label><br>
+    {% for row in data %}
+            <br>
+            <h4 style="text-align: left">{{row[5]}}</h4>
+            <label>Poll ID: {{row[1]}}</label>
+            <br>
+            <label>Date: {{row[3]}}</label>
+            <br>
+            <label>Responses: {{row[8]}}</label>
+            <br>
+            <br>
     {% endfor %}
 </div>
 </form>
