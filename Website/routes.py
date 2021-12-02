@@ -10,6 +10,7 @@ import urllib
 import time
 import socket as sock
 import threading as thread
+import datetime
 from threading import Thread
 from . import db
 from . import results_graph
@@ -143,9 +144,23 @@ def share_poll():
     return render_template("share_poll.html", share=share)
 
 
-@routes.route('/history', methods=['GET', 'POST'])
+@routes.route('/history', methods=['GET'])
 def view_history():
-    return render_template("history.html")
+    if request.method == 'GET':
+        sql = text(
+            """
+            SELECT *,COUNT(*) as Repsonses
+            FROM answer, question
+            WHERE answer.question_id = question.question_id
+            GROUP BY answer.question_id 
+            ORDER BY Repsonses DESC;
+            """
+        )
+        print(sql)
+        data = db.engine.execute(sql).fetchall()
+
+    return render_template("history.html", data=data)
+    
 
 
 @routes.route('/search', methods=['GET', 'POST'])
