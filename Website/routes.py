@@ -23,6 +23,21 @@ routes = Blueprint("routes", __name__)
 
 @routes.route('/')
 def home():
+    sql = text(
+    """
+    SELECT question_id,text FROM question LIMIT 5;
+    """
+    )
+    result = db.engine.execute(sql)
+
+    responses = []
+    choices = []
+    print("RESULTS:")
+    for r in result:
+        responses.append(r['question_id'])
+        choices.append(r['text'])
+    print(responses)
+    print(choices)
     return render_template("home.html")
 
 
@@ -53,19 +68,13 @@ def create_poll():
                 error_control = 1
 
         if error_control == 0:
+            # CREATE AND WRITE POLL TO DATABASE
             poll = Question(text=question)
             db.session.add(poll)
             db.session.flush()
 
-        #elif len(option0) < 1 or len(option1) < 1:
-            #flash("Please enter text for option", category="error")
-        #else:
-            # IF WE WANT POLL PREVIEW WE NEED TO MOVE THIS
-            # THERE THIS CREATES IT RIGHT AWAT
-            #poll = Question(text=question)
-            #db.session.add(poll)
-            #db.session.flush()
-
+            # CREATE AND WRITE OPTIONS AND INITIAL
+            # ANSWERS TO THE DATABASE
             op = 'A'
             for option in options:
                 choice = Choice(question_id=poll.question_id,choice=op,text=option)
