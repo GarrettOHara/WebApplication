@@ -1,26 +1,27 @@
-{% extends "base.html" %} {% block title %}Pollster: View Polls{% endblock %} {% block content
-%}
-
+{% extends "base.html" %}
+{% block title %}Pollster: View Polls{% endblock %}
+{% block content %}
 <br>
 <form method="POST">
 <h3 style="text-align: center">Poll History</h3>
 <div>
     {% for row in data %}
-            <br>
+        <br>
             <h4 style="text-align: left">{{row[5]}}</h4>
             <label>Poll ID: {{row[1]}}</label>
-            <br>
+        <br>
             <label>Date: {{row[3]}}</label>
-            <br>
+        <br>
             <label>Responses: {{row[8]}}</label>
-            <br>
+        <br>
+        {%if session['admin'] %}
+            {% set x=session.__setitem__("admin_poll_data",row) %}
             <button type="edit" class = "btn btn-warning btn-sm">Edit Poll</button>
             <button type="delete" class="btn btn-danger btn-sm">Delete Poll</button>
-            <br>
-            <br>
+        {% endif %}
+        <br>
+        <br>
     {% endfor %}
 </div>
 </form>
-
-
 {% endblock %}

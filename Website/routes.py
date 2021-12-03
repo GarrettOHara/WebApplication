@@ -6,10 +6,14 @@
 #       nkokenisXXXX@sdsu.edu
 #       mschuitemanXXX@sdsu.edu
 # -----------------------------------------------------------
+from os import error
 import urllib
 import time
 import socket as sock
 import threading as thread
+from flask.templating import render_template_string
+
+from sqlalchemy.sql.functions import user
 from . import db
 from . import results_graph
 from sqlalchemy import text
@@ -38,6 +42,51 @@ def home():
     print(responses)
     print(choices)
     return render_template("home.html")
+
+@routes.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username)
+        print(password)
+
+        if username is None or password is None or len(username) < 1 or len(password) < 1:
+            flash("Username or password entered is too short!", category="error")
+            return render_template("admin.html")
+  
+        sql = text(
+            """
+            SELECT COUNT(*)
+            FROM admin
+            WHERE '{}'=username and '{}'=password;
+            """.format(username,password)
+        )
+        data = db.engine.execute(sql).fetchall()
+        print(data[0][0])
+        if data[0][0]==0:
+            flash("Error: Invalid login", category="error")
+            return render_template("admin.html")
+        sql = text(
+            """
+            SELECT *,COUNT(*) as Repsonses
+            FROM answer, question
+            WHERE answer.question_id = question.question_id
+            GROUP BY answer.question_id 
+            ORDER BY Repsonses DESC;
+            """
+        )
+        data = db.engine.execute(sql).fetchall()
+        print("ADMIN LOGIN SUCCESSFUL")
+        session['admin'] = True
+        return render_template("history.html",data=data)
+
+       
+        
+    elif request.method == 'GET':    
+        return render_template("admin.html")
+    
+    return render_template("admin.html")
 
 
 @routes.route('/create_poll', methods=['GET', 'POST'])
@@ -144,7 +193,21 @@ def share_poll():
 @routes.route('/history', methods=['GET', 'POST'])
 def view_history():
     if request.method == 'POST':
-        
+        print("HERE")
+        if session['admin']:
+            print(request.form)
+            if request.form == "delete":
+                print(session['admin_poll_data'])
+                flash("Poll Deleted", category="success")
+                return render_template("history.html")
+            if request.form == "edit":
+                print(session['admion_poll_data'])
+                return render_template('edit_poll.html',data=session['admin_poll_data'])
+            print("ERROR")
+            return render_template("history.html",data=session['poll_history'])
+        else:
+            flash("You do not have access to do that", category=error)
+    
     if request.method == 'GET':
         sql = text(
             """
@@ -155,10 +218,9 @@ def view_history():
             ORDER BY Repsonses DESC;
             """
         )
-        print(sql)
         data = db.engine.execute(sql).fetchall()
-
-    return render_template("history.html", data=data)
+        session['poll_history'] = data
+        return render_template("history.html", data=data)
 
 
 @routes.route('/search', methods=['GET', 'POST'])
