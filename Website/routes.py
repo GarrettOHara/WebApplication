@@ -10,6 +10,8 @@ import urllib
 import time
 import socket as sock
 import threading as thread
+
+from sqlalchemy.sql.functions import user
 from . import db
 from . import results_graph
 from sqlalchemy import text
@@ -38,6 +40,24 @@ def home():
     print(responses)
     print(choices)
     return render_template("home.html")
+
+@routes.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        print()
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        print(username)
+        print(password)
+
+        #if len(username) < 1 or len(password) < 1:
+            #flash("Username or password entered is too short!", category="error")
+        
+    elif request.method == 'GET':
+        print()
+    
+    return render_template("admin.html")
 
 
 @routes.route('/create_poll', methods=['GET', 'POST'])
