@@ -56,6 +56,22 @@ def login():
         
     elif request.method == 'GET':
         print()
+        sql = text(
+            """
+            SELECT COUNT(*)
+            FROM addmin
+            WHERE {}=username and {}=password;
+            """
+        )
+        data = db.engine.execute(sql).fetchall()
+
+        if 0 in data:
+            flash("Error: Invalid login", category="error")
+            return render_template("admin.html")
+        
+        session['admin'] = True
+
+        return render_template("history.html")
     
     return render_template("admin.html")
 
