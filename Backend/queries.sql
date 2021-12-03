@@ -115,3 +115,7 @@ SELECT *
 FROM question
 WHERE question.text LIKE '{}%';
 -------------------------------------------------
+
+SELECT COUNT(*)
+FROM addmin
+WHERE {}=username and {}=password;
