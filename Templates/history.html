@@ -2,7 +2,7 @@
 %}
 
 <br>
-<form method="GET">
+<form method="POST">
 <h3 style="text-align: center">Poll History</h3>
 <div>
     {% for row in data %}
@@ -13,6 +13,9 @@
             <label>Date: {{row[3]}}</label>
             <br>
             <label>Responses: {{row[8]}}</label>
+            <br>
+            <button type="edit" class = "btn btn-warning btn-sm">Edit Poll</button>
+            <button type="delete" class="btn btn-danger btn-sm">Delete Poll</button>
             <br>
             <br>
     {% endfor %}

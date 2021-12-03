@@ -141,9 +141,10 @@ def share_poll():
     return render_template("share_poll.html", share=share)
 
 
-@routes.route('/history', methods=['GET'])
+@routes.route('/history', methods=['GET', 'POST'])
 def view_history():
-
+    if request.method == 'POST':
+        
     if request.method == 'GET':
         sql = text(
             """
