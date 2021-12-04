@@ -38,7 +38,7 @@ def home():
         choices.append(r['text'])
     return render_template("home.html")
 
-@routes.route('/login', methods=['GET', 'POST'])
+@routes.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -69,7 +69,17 @@ def manage_polls():
     if request.method == "POST":
         poll_id = request.form.get('option')
         session['pollid'] = poll_id
-        return redirect(url_for('routes.poll_info'))
+        sql = text(
+            """
+            SELECT * FROM question WHERE question_id={}
+            """.format(poll_id)
+        )
+        result = db.engine.execute(sql).fetchall()
+        if result is None or len(result) < 1:
+            flash("Error: Poll does not exist.", category="error")
+            return render_template("manage_polls.html")
+        else:
+            return redirect(url_for('routes.poll_info'))
     else:
         return render_template("manage_polls.html")
 
@@ -77,7 +87,7 @@ def manage_polls():
 def poll_info():
     poll_id = session.get('pollid', None)
     if request.method == "GET":
-        sql = text("SELECT * FROM question WHERE question.question_id={}".format(poll_id))
+        sql = text("SELECT * FROM question WHERE question_id={}".format(poll_id))
         result = db.engine.execute(sql).fetchall()
         return render_template("poll_info.html", data=result)
     elif request.method == "POST":
@@ -115,7 +125,7 @@ def poll_info():
             flash("Success: Poll updated.")
         return redirect(url_for('routes.manage_polls'))
 
-@routes.route('/create_poll', methods=['GET', 'POST'])
+@routes.route('/create_poll', methods=['GET','POST'])
 def create_poll():
     if request.method == 'POST':
         question = request.form.get('question')
@@ -148,14 +158,14 @@ def create_poll():
 
     return render_template("create_poll.html")
 
-@routes.route('/results', methods=['GET', 'POST'])
+@routes.route('/results', methods=['GET','POST'])
 def results():
     if request.method == 'GET':
         question = session['qid']
         sql = text(
             """
-            SELECT q.text as Question, c.text AS Choice, COUNT(c.choice_id)-1 AS Responses
-            FROM question AS q, choice AS c, answer as a
+            SELECT q.text AS Question, c.text AS Choice, COUNT(c.choice_id)-1 AS Responses
+            FROM question AS q, choice AS c, answer AS a
             WHERE a.question_id = q.question_id and a.choice_id = c.choice_id and q.question_id = {}
             GROUP BY a.choice_id;
             """.format(question)
@@ -167,20 +177,17 @@ def results():
         for r in result:
             responses.append(r['Responses'])
             choices.append(r['Choice'])
-        
         th = thread.Thread(target=results_graph.graph_values,args=(choices,responses), daemon=True)
         th.start()
         time.sleep(1)
-
         return render_template("results.html")
-        
-    return render_template("results.html")
+    else:
+        return render_template("results.html")
 
 @routes.route('/share_poll', methods=['GET'])
 def share_poll():
     qid = session['qid']
     parameters = {"qid": qid}
-    
     s = sock.socket(sock.AF_INET, sock.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     socket = s.getsockname()[0]
@@ -236,7 +243,6 @@ def answer_poll():
         for r in result:
             question=r[0]
         session['question'] = question
-
         return render_template("answer_poll.html",question=question,data=dic)
 
 @routes.errorhandler(404)

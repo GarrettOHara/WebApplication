@@ -1,11 +1,9 @@
-{% extends "base.html" %} {% block title %}Pollster: Share{% endblock %} {% block content
-%}
-
-<br />
+{% extends "base.html" %}
+{% block title %}Pollster: Share{% endblock %}
+{% block content %}
+<br>
+<h3 style="text-align: center">Share Poll</h3>
 <form method="POST">
-    <h3 style="text-align: center">Poll Created!</h3>
-    <p>Here's your shareable link: <a href={{share}}>{{share}}</a>
-    </p>
+    <label>Here's your shareable link: <a href={{share}}>{{share}}</a></label>
 </form>
-
 {% endblock %}
