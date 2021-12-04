@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Pollster: View Polls{% endblock %}
+{% block content %}
+<br>
+<h3 style="text-align: center">Poll Information</h3>
+<form method="POST">
+    <div>
+        {% for row in data %}
+            <br>
+                <h4 style="text-align: left">Poll Name</h4>
+                <label>{{row[1]}}</label>
+            <br>
+            <br>
+                <h4 style="text-align: left">Poll ID</h4>
+                <label>{{row[0]}}</label>
+            <br>
+            <br>
+                <h4 style="text-align: left">Poll Date</h4>
+                <label>{{row[3]}}</label>
+            <br>
+            <br>
+            <br>
+                <label>New Poll Name</label>
+                <input type="text" class="form-control" id="option" name="option" placeholder="Poll Name" />
+            <br>
+            <button type="submit" class="btn btn-primary pull-left" name="edit" value="edit">Submit Changes</button>
+            <button type="delete" class="btn btn-danger pull-right" name="delete" value="delete">Delete Poll</button>
+            <br>
+        {% endfor %}
+    </div>
+</form>
+{% endblock %}

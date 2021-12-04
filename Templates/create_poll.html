@@ -1,6 +1,7 @@
-{% extends "base.html" %} {% block title %}Pollster: Create a Poll{% endblock %} {% block content
-%}
-<br />
+{% extends "base.html" %}
+{% block title %}Pollster: Create a Poll{% endblock %}
+{% block content %}
+<br>
 <form method="POST">
     <head>  
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>  
@@ -12,8 +13,10 @@
         <textarea class="form-control" id="question" name="question" rows="3"></textarea>
     </div>
       
-    <body> <button type="button" class="btn btn-primary pull-left" id="Add">Add Option</button><button type="button" class="btn btn-primary pull-right" id="Remove">Remove Option</button>  
-        <br><br>
+    <body>
+        <button type="button" class="btn btn-primary pull-left" id="Add">Add Option</button><button type="button" class="btn btn-primary pull-right" id="Remove">Remove Option</button>  
+        <br>
+        <br>
         <div class="form-group">
             <label for="option">Option</label>
             <input type="text" class="form-control" id="option" name="option" placeholder="Enter text..." />
@@ -34,11 +37,7 @@
             });  
         </script>  
     </body>
-
-
-    <!-- <button type="button" class="btn btn-primary pull-left">Add Option</button> -->
-    <button type="submit" class="btn btn-primary btn-lg btn-block">Create</button>
     
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Create</button>
 </form>
-
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Pollster: Manage Polls{% endblock %}
+{% block content %}
+<br>
+<form method="POST">
+<h3 style="text-align: center">Manage Poll</h3>
+<div class="form-group">
+    <br>
+    <input type="text" class="form-control" id="option" name="option" placeholder="Poll ID" />
+    <br>
+    <button type="submit" class="btn btn-primary btn-lg btn-block" id="Edit">Submit</button>
+</div>
+</form>
+{% endblock %}
