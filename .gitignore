@@ -2,6 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,python
 # Virtual Env
 Documentation/venv/*
+Documentation/credentials.txt
+Documentation/virtual-env-setup.txt
 
 ### Flask ###
 instance/*

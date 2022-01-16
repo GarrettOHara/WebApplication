@@ -1,10 +1,9 @@
 # -----------------------------------------------------------
 # Defining global objects
 #
-# 2021  Garrett O'Hara, Nick Kokenis, Matt Schuiteman
+# 2021  Garrett O'Hara, Nick Kokenis
 # email garrettohara2018@gmail.com
 #       nkokenisXXXX@sdsu.edu
-#       mschuitemanXXX@sdsu.edu
 # -----------------------------------------------------------
 
 import os

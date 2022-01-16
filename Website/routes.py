@@ -23,6 +23,16 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 
 routes = Blueprint("routes", __name__)
 
+@routes.route('/edit_poll', methods=['GET', 'POST'])
+def edit_poll():
+    if request.method=="POST":
+        # WHEN WE POST TO THIS FUNCTION WE WILL SEND ALL OF THE 
+        # QUESTION ID IN A PYTHON DICTIONARY
+        if session['admin']:
+            return render_template("edit_poll.html")#,data=data)
+        else:
+            return render_template("history.html")
+
 @routes.route('/')
 def home():
     sql = text(
