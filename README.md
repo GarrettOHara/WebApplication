@@ -1,6 +1,4 @@
 # WebApplication
-CS503 Web Application Project
-
 A dynamic web application that provides anonomous polling with real time results
 
 The front end is built with HTML CSS/Bootstrap and Jinja2 for dynamic pages.
